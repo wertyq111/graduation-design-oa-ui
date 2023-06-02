@@ -22,11 +22,12 @@
 ### 1.2.1 docker 安装
 ```bash
 # 1. 下载项目
-$git clone git@github.com:wertyq111/vwms-ui.git
+$git clone git@github.com:wertyq111/blog-ui.git
   
 # 2. 修改后端请求地址 VUE_APP_API_BASE_URL
-$cd vwms-ui
-$vi app/.env.development 
+$cd blog-ui/app
+$cp .env.example .env.development
+$vi .env.development 
   
 # 3. 运行 docker
 $docker compose up -d
@@ -39,11 +40,12 @@ $docker compose logs -f
 ```bash
 
 # 1. 下载项目
-$git clone git@repo.netsun.com:dev/dev4/vwms-ui.git
+$git clone git@repo.netsun.com:dev/dev4/blog-ui.git
   
 # 2. 修改后端请求地址 VUE_APP_API_BASE_URL
-$cd vwms-ui
-$vi app/.env.development 
+$cd blog-ui/app
+$cp .env.example .env.development
+$vi .env.development 
   
 # 3. 镜像加速--registry
 $npm install --registry=https://registry.npmmirror.com
@@ -52,7 +54,7 @@ $npm install --registry=https://registry.npmmirror.com
 $npm install
   
 # 5. 运行项目
-$npm run dev
+$npm run serve
 ```
 
 ## 1.3 项目结构
@@ -116,9 +118,7 @@ $npm run dev
 |   |   |-xxxxxx                       # 其它模板页面，不一一列举
 |   |-App.vue                          # 入口页面
 |   |-main.js                          # 入口 js
-|-.env                                 # 多环境配置
-|-.env.development                     # 开发环境配置
-|-.env.preview                         # 演示环境配置
+|-.env.example                         # 开发环境配置实例
 |-.eslintignore                        # eslint 忽略配置
 |-.eslintrc.js                         # eslint 配置
 |-package.json
