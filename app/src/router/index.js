@@ -15,13 +15,18 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/login',
-    component: () => import('@/views/login/login'),
+    component: () => import('@/views/admin/login/login'),
     meta: {title: '登录'}
   },
   {
-    path: '/todo',
-    component: () => import('@/views/todo/index'),
-    meta: {title: '计划'}
+    path: '/',
+    component: () => import('@/views/home'),
+    meta: {title: 'Pedestrian'},
+    children: [{
+      path: '/',
+      name: 'index',
+      component: () => import('@/views/index/index')
+    }]
   },
   // {
   //   path: '/forget',
@@ -30,7 +35,7 @@ const routes = [
   // },
   {
     path: '*',
-    component: () => import('@/views/exception/404')
+    component: () => import('@/views/admin/exception/404')
   }
 ];
 
@@ -51,10 +56,10 @@ router.beforeEach((to, from, next) => {
       store.dispatch('user/getMenus').then(({menus, home}) => {
         // menuToRoutes方法是把菜单数据转成路由数据格式
         router.addRoute({
-          path: '/',
+          path: '/admin',
           component: EleLayout,
           redirect: setting.homePath || home,
-          children: menuToRoutes(menus, (component) => import('@/views' + component))
+          children: menuToRoutes(menus, (component) => import('@/views/admin' + component))
         });
         next({...to, replace: true});
       }).catch(() => {

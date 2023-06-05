@@ -48,7 +48,7 @@
     @set-home-components="setHomeComponents">
     <!-- logo图标 -->
     <template slot="logo">
-      <img alt="logo" src="@/assets/logo.png"/>
+      <img alt="logo" src="../assets/img/logo.png"/>
     </template>
     <!-- 顶栏右侧区域 -->
     <template slot="right">
