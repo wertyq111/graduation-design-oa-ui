@@ -116,25 +116,25 @@ export default {
       ],
       message: [
         {
-          avatar: require('@/assets/img/logo.png'),
+          avatar: require('@/assets/logo.png'),
           title: '落叶不随风 评论了你的日志',
           content: '写的不错, 以后多多向你学习~',
           time: '2020-07-27 18:30:18'
         },
         {
-          avatar: require('@/assets/img/logo.png'),
+          avatar: require('@/assets/logo.png'),
           title: '雨晨的清风 点赞了你的日志',
           content: '写的不错, 以后多多向你学习~',
           time: '2020-07-27 09:08:36'
         },
         {
-          avatar: require('@/assets/img/logo.png'),
+          avatar: require('@/assets/logo.png'),
           title: '孤城凉梦 评论了你的周报',
           content: '写的不错, 以后多多向你学习~',
           time: '2020-07-26 18:30:01'
         },
         {
-          avatar: require('@/assets/img/logo.png'),
+          avatar: require('@/assets/logo.png'),
           title: '淡墨无殇 点赞了你的周报',
           content: '写的不错, 以后多多向你学习~',
           time: '2020-07-25 11:03:31'

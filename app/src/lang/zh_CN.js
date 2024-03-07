@@ -95,7 +95,7 @@ export default {
   },
   // 登录界面
   login: {
-    title: '网盛虚拟仓库管理系统',
+    title: '个人后台管理系统',
     username: '请输入登录账号',
     password: '请输入登录密码',
     captcha: '请输入验证码',

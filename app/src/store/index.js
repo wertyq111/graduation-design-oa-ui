@@ -6,7 +6,6 @@ import Vuex from 'vuex';
 import getters from './getters';
 import user from './modules/user';
 import theme from './modules/theme';
-import web from './modules/web';
 
 Vue.use(Vuex);
 
@@ -16,7 +15,6 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     user,
-    web,
     theme
   },
   getters

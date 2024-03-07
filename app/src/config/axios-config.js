@@ -63,11 +63,11 @@ axios.interceptors.response.use((res) => {
 function goLogin(reload) {
   store.dispatch('user/removeToken').then(() => {
     if (reload) {
-      location.replace('/admin/login');  // 这样跳转避免再次登录重复注册动态路由
+      location.replace('/login');  // 这样跳转避免再次登录重复注册动态路由
     } else {
       const path = router.currentRoute.path;
       return router.push({
-        path: '/admin/login',
+        path: '/login',
         query: path && path !== '/' ? {form: path} : null
       });
     }

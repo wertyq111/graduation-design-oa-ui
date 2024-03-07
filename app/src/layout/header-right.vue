@@ -2,11 +2,11 @@
 <template>
   <div class="ele-admin-header-tool">
     <!-- 全屏切换 -->
-    <div class="ele-admin-header-tool-item hidden-xs-only" @click="changeFullscreen">
+    <div id="full-screen" class="ele-admin-header-tool-item hidden-xs-only" @click="changeFullscreen">
       <i :class="fullscreen ? 'el-icon-_screen-restore' : 'el-icon-_screen-full'"></i>
     </div>
     <!-- 语言切换 -->
-    <div class="ele-admin-header-tool-item">
+    <div id="language-select" class="ele-admin-header-tool-item">
       <el-dropdown placement="bottom" @command="changeLanguage">
         <i class="el-icon-_language"></i>
         <el-dropdown-menu slot="dropdown">
@@ -23,11 +23,11 @@
       </el-dropdown>
     </div>
     <!-- 消息通知 -->
-    <div class="ele-admin-header-tool-item">
+    <div id="notice-receive" class="ele-admin-header-tool-item">
       <ele-notice/>
     </div>
     <!-- 用户信息 -->
-    <div class="ele-admin-header-tool-item">
+    <div id="user-info" class="ele-admin-header-tool-item">
       <el-dropdown @command="onUserDropClick">
         <div class="ele-admin-header-avatar">
           <el-avatar :src="loginUser.avatar"/>

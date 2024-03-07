@@ -93,7 +93,7 @@ export default {
     }
   },
   login: {
-    title: '网盛虚拟仓库管理系统',
+    title: '个人后台管理系统',
     username: '請輸入登入帳號',
     password: '請輸入登入密碼',
     captcha: '請輸入驗證碼',

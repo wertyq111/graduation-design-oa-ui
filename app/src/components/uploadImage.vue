@@ -12,7 +12,7 @@
       </div>
       <div v-if="photo.length < limit" v-loading="loading" class="room_add_img">
         <span style="margin-top: 35px"
-        ><img src="../assets/img/add_img.png"
+        ><img src="../assets/add_img.png"
         /></span>
         <input :disabled="disabled" type="file" @change="add_img"/>
       </div>
