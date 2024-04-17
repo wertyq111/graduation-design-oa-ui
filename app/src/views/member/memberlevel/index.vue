@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       // 表格数据接口
-      url: '/memberlevel/index',
+      url: '/member-level/index',
       // 表格列配置
       columns: [
         {
@@ -135,7 +135,7 @@ export default {
           width: 100
         },
         {
-          prop: 'create_time',
+          prop: 'createTime',
           label: '创建时间',
           sortable: 'custom',
           showOverflowTooltip: true,
@@ -146,7 +146,7 @@ export default {
           }
         },
         {
-          prop: 'update_time',
+          prop: 'updateTime',
           label: '更新时间',
           sortable: 'custom',
           showOverflowTooltip: true,
@@ -194,7 +194,7 @@ export default {
     /* 删除 */
     remove(row) {
       const loading = this.$loading({lock: true});
-      this.$http.post('/memberlevel/delete', {id: row.id}).then(res => {
+      this.$http.delete(`/member-level/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);
@@ -217,7 +217,7 @@ export default {
         type: 'warning'
       }).then(() => {
         const loading = this.$loading({lock: true});
-        this.$http.post('/memberlevel/delete', {id: this.selection.map(d => d.id)}).then(res => {
+        this.$http.delete('/member-level/batchDelete', {params:{id: this.selection.map(d => d.id)}}).then(res => {
           loading.close();
           if (res.data.code === 0) {
             this.$message.success(res.data.msg);

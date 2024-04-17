@@ -166,7 +166,7 @@ export default {
           slot: 'roles'
         },
         {
-          prop: 'create_time',
+          prop: 'createTime',
           label: '创建时间',
           sortable: 'custom',
           showOverflowTooltip: true,

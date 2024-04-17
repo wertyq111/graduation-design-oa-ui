@@ -80,11 +80,7 @@ export default {
       this.authData = [];
       if (!this.data) return;
       this.authLoading = true;
-      this.$http.get('/role/getPermissionList', {
-        params: {
-          role_id: this.data.id
-        }
-      }).then(res => {
+      this.$http.get(`/role/permission/${this.data.id}`).then(res => {
         this.authLoading = false;
         if (res.data.code === 0) {
           this.authData = this.$util.toTreeData(res.data.data, 'id', 'pid');
@@ -100,7 +96,7 @@ export default {
     save() {
       this.loading = true;
       let ids = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys());
-      this.$http.post('/role/savePermission', {role_id: this.data.id, menu_id: ids}).then(res => {
+      this.$http.post(`/role/permission/${this.data.id}`, {menu_id: ids}).then(res => {
         this.loading = false;
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);

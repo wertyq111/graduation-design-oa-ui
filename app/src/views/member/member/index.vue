@@ -10,11 +10,19 @@
         @submit.native.prevent>
         <el-row :gutter="15">
           <el-col :lg="6" :md="12">
-            <el-form-item label="会员账号:">
+            <el-form-item label="账号:">
               <el-input
                 v-model="where.username"
                 clearable
-                placeholder="请输入会员账号"/>
+                placeholder="请输入账号"/>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="6" :md="12">
+            <el-form-item label="昵称:">
+              <el-input
+                v-model="where.nickname"
+                clearable
+                placeholder="请输入昵称"/>
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="12">
@@ -50,25 +58,6 @@
         :selection.sync="selection"
         :where="where"
         height="calc(100vh - 315px)">
-        <!-- 表头工具栏 -->
-        <template slot="toolbar">
-          <el-button
-            v-if="permission.includes('sys:member:add')"
-            class="ele-btn-icon"
-            icon="el-icon-plus"
-            size="small"
-            type="primary"
-            @click="openEdit(null)">添加
-          </el-button>
-          <el-button
-            v-if="permission.includes('sys:member:dall')"
-            class="ele-btn-icon"
-            icon="el-icon-delete"
-            size="small"
-            type="danger"
-            @click="removeBatch">删除
-          </el-button>
-        </template>
         <!-- 性别列 -->
         <template slot="gender" slot-scope="{row}">
           <el-tag
@@ -150,7 +139,7 @@ export default {
   data() {
     return {
       // 表格数据接口
-      url: '/member/index',
+      url: '/members/index',
       // 表格列配置
       columns: [
         {
@@ -169,7 +158,7 @@ export default {
           fixed: "left"
         },
         {
-          prop: 'username',
+          prop: 'user.username',
           label: '会员账号',
           align: 'center',
           showOverflowTooltip: true,
@@ -230,7 +219,7 @@ export default {
           slot: 'status',
         },
         {
-          prop: 'create_time',
+          prop: 'createTime',
           label: '注册时间',
           align: 'center',
           showOverflowTooltip: true,
@@ -240,7 +229,7 @@ export default {
           }
         },
         {
-          prop: 'update_time',
+          prop: 'updateTime',
           label: '更新时间',
           align: 'center',
           showOverflowTooltip: true,
@@ -260,7 +249,9 @@ export default {
         }
       ],
       // 表格搜索条件
-      where: {},
+      where: {
+        include: ['user']
+      },
       // 表格选中数据
       selection: [],
       // 当前编辑数据
@@ -274,6 +265,7 @@ export default {
   methods: {
     /* 刷新表格 */
     reload() {
+      console.log(this.$refs.table.data)
       this.$refs.table.reload({where: this.where});
     },
     /* 重置搜索 */
@@ -289,7 +281,7 @@ export default {
     /* 删除 */
     remove(row) {
       const loading = this.$loading({lock: true});
-      this.$http.post('/member/delete', {id: row.id}).then(res => {
+      this.$http.delete(`/members/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);
@@ -302,39 +294,14 @@ export default {
         this.$message.error(e.message);
       });
     },
-    /* 批量删除 */
-    removeBatch() {
-      if (!this.selection.length) {
-        this.$message.error('请至少选择一条数据')
-        return;
-      }
-      this.$confirm('确定要删除选中的会员吗?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        const loading = this.$loading({lock: true});
-        this.$http.post('/member/delete', {id: this.selection.map(d => d.id)}).then(res => {
-          loading.close();
-          if (res.data.code === 0) {
-            this.$message({type: 'success', message: res.data.msg});
-            this.reload();
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        }).catch(e => {
-          loading.close();
-          this.$message.error(e.message);
-        });
-      }).catch(() => {
-      });
-    },
+
     /* 更改状态 */
     editStatus(row) {
       const loading = this.$loading({lock: true});
       let params = Object.assign({
-        "id": row.id,
         "status": row.status
       })
-      this.$http.post('/member/status', params).then(res => {
+      this.$http.post(`/members/${row.id}`, params).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message({type: 'success', message: res.data.msg});

@@ -19,7 +19,10 @@ export default {
   // 直接指定菜单数据
   menus: null,
   // 用户信息接口
-  userUrl: '/index/getUserInfo',
+  userUrl: '/users/getUserInfo',
+  // 七牛云上传接口
+  qiniuUploadUrl: 'https://up.qiniup.com',
+  qiniuDownloadnUrl: 'http://cdn.chouy.xyz',
   // 自定义解析接口用户信息
   parseUser(res) {
     // code为0是成功, 不一样可以处理如: {code: res.code === 200 ? 0 : res.code, msg: res.message}

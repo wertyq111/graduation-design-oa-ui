@@ -206,16 +206,6 @@ export default {
           slot: 'status',
         },
         {
-          prop: 'create_time',
-          label: '创建时间',
-          showOverflowTooltip: true,
-          minWidth: 160,
-          align: 'center',
-          formatter: (row, column, cellValue) => {
-            return this.$util.toDateString(cellValue);
-          }
-        },
-        {
           columnKey: 'action',
           label: '操作',
           width: 190,
@@ -265,7 +255,7 @@ export default {
         this.showEdit = true;
       } else {
         // 编辑
-        this.$http.get('/menu/info?id=' + row.id).then(res => {
+        this.$http.get(`/menu/info/${row.id}`, {params: {include: ['children']}}).then(res => {
           if (res.data.code === 0) {
             this.current = res.data.data;
             this.showEdit = true;
@@ -279,12 +269,12 @@ export default {
     },
     /* 删除 */
     remove(row) {
-      if (row.children && row.children.length > 0) {
-        this.$message.error('请先删除子节点');
-        return;
-      }
+      // if (row.children && row.children.length > 0) {
+      //   this.$message.error('请先删除子节点');
+      //   return;
+      // }
       const loading = this.$loading({lock: true});
-      this.$http.post('/menu/delete', {id: row.id}).then(res => {
+      this.$http.delete(`/menu/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);

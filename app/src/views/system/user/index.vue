@@ -164,7 +164,7 @@ export default {
   data() {
     return {
       // 表格数据接口
-      url: '/user/index',
+      url: '/users/list',
       // 表格列配置
       columns: [
         {
@@ -190,31 +190,7 @@ export default {
           minWidth: 110,
         },
         {
-          prop: 'realname',
-          label: '用户姓名',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 110,
-          slot: 'realname',
-        },
-        {
-          columnKey: 'avatar',
-          label: '头像',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 60,
-          slot: 'avatar'
-        },
-        {
-          prop: 'gender',
-          label: '性别',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 60,
-          slot: 'gender'
-        },
-        {
-          prop: 'mobile',
+          prop: 'phone',
           label: '手机号',
           align: 'center',
           showOverflowTooltip: true,
@@ -229,36 +205,15 @@ export default {
           slot: 'roles'
         },
         {
-          prop: 'level_name',
-          label: '职级',
+          columnKey: 'status',
+          label: '状态',
           align: 'center',
           showOverflowTooltip: true,
-          minWidth: 110
+          minWidth: 200,
+          slot: 'status'
         },
         {
-          prop: 'position_name',
-          label: '岗位',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 110
-        },
-        {
-          prop: 'dept_name',
-          label: '部门',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 150
-        },
-        {
-          prop: 'status',
-          label: '职级状态',
-          align: 'center',
-          width: 100,
-          resizable: false,
-          slot: 'status',
-        },
-        {
-          prop: 'create_time',
+          prop: 'createTime',
           label: '创建时间',
           align: 'center',
           showOverflowTooltip: true,
@@ -268,7 +223,7 @@ export default {
           }
         },
         {
-          prop: 'update_time',
+          prop: 'updateTime',
           label: '更新时间',
           align: 'center',
           showOverflowTooltip: true,
@@ -288,7 +243,9 @@ export default {
         }
       ],
       // 表格搜索条件
-      where: {},
+      where: {
+        include: ['roles']
+      },
       // 表格选中数据
       selection: [],
       // 当前编辑数据
@@ -317,7 +274,7 @@ export default {
     /* 删除 */
     remove(row) {
       const loading = this.$loading({lock: true});
-      this.$http.post('/user/delete', {id: row.id}).then(res => {
+      this.$http.delete(`/users/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);
@@ -359,10 +316,9 @@ export default {
     editStatus(row) {
       const loading = this.$loading({lock: true});
       let params = Object.assign({
-        "id": row.id,
-        "status": row.status
+        status: row.status
       })
-      this.$http.post('/user/status', params).then(res => {
+      this.$http.post(`/users/status/${row.id}`, params).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message({type: 'success', message: res.data.msg});
@@ -380,7 +336,7 @@ export default {
      */
     resetPwd(row) {
       const loading = this.$loading({lock: true});
-      this.$http.post('/user/resetPwd', {id: row.id}).then(res => {
+      this.$http.post(`/users/resetPwd/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message({type: 'success', message: res.data.msg});

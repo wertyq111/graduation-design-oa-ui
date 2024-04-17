@@ -119,7 +119,7 @@ export default {
     /* 获取当前用户信息 */
     getUserInfo() {
       if (setting.userUrl) {
-        this.$http.get(setting.userUrl).then((res) => {
+        this.$http.get(setting.userUrl, {params: {include: ['member']}}).then((res) => {
           const result = setting.parseUser ? setting.parseUser(res.data) : res.data;
           if (result.code === 0) {
             const user = result.data;
@@ -127,7 +127,7 @@ export default {
             this.$store.dispatch('user/setRoles', user ? user.roles : null);
             this.$store.dispatch('user/setAuthorities', user ? user.authorities : null);
             // 设置节点权限
-            this.$store.dispatch('user/setPermission', user ? user.permissionList : null);
+            this.$store.dispatch('user/setPermission', user ? user.permissions : null);
           } else if (result.msg) {
             this.$message.error(result.msg);
           }

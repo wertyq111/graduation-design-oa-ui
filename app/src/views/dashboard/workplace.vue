@@ -312,7 +312,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import Guide from "@/components/guide.vue";
 
 export default {
@@ -519,20 +518,7 @@ export default {
   },
   watch: {
   },
-  mounted() {
-    this.driver = driver()
-  },
   methods: {
-    // 引导
-    guide() {
-      this.driver.setConfig({
-        steps: steps,
-        nextBtnText: "下一步",
-        prevBtnText: "上一步",
-        doneBtnText: "完成"
-      })
-      this.driver.drive()
-    },
     // 天气图标
     getWeatherType(name) {
       switch(name) {
@@ -556,7 +542,7 @@ export default {
     },
     // 获取天气信息
     getWeatherInfo() {
-      axios.post('/api/v1/weather').then(res => {
+      this.$http.get('/weather').then(res => {
         if (res.data.code === 0) {
           let weather = res.data.data;
           if(weather.weather.includes('暴')) {

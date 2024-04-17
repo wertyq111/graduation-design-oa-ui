@@ -116,7 +116,8 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$http.post('/role/edit', this.form).then(res => {
+          let url = this.isUpdate ? `/role/${this.form.id}` : '/role/add'
+          this.$http.post(url, this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {
               this.$message.success(res.data.msg);

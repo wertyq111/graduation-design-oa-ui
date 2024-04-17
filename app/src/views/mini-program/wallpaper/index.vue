@@ -10,19 +10,24 @@
         @submit.native.prevent>
         <el-row :gutter="15">
           <el-col :lg="6" :md="12">
-            <el-form-item label="框架编码:">
-              <el-input
-                v-model="where.code"
+            <el-form-item label="分类:">
+              <el-select
+                v-model="where.classId"
+                class="ele-block"
                 clearable
-                placeholder="请输入框架编码"/>
+                filterable
+                placeholder="-请选择分类-"
+                size="small">
+                <el-option v-for="item in classifies" :key="item.id" :label="item.name" :value="item.id"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="12">
-            <el-form-item label="框架名称:">
+            <el-form-item label="发布者:">
               <el-input
-                v-model="where.name"
+                v-model="where.nickname"
                 clearable
-                placeholder="请输入框架名称"/>
+                placeholder="请输入发布者"/>
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="12">
@@ -49,33 +54,44 @@
         <!-- 表头工具栏 -->
         <template slot="toolbar">
           <el-button
-            v-if="permission.includes('sys:init-model:add')"
+            v-if="permission.includes('sys:wallpaper:add')"
             class="ele-btn-icon"
             icon="el-icon-plus"
             size="small"
             type="primary"
             @click="openEdit(null)">添加
           </el-button>
-          <el-button
-            v-if="permission.includes('sys:init-model:dall')"
-            class="ele-btn-icon"
-            icon="el-icon-delete"
-            size="small"
-            type="danger"
-            @click="removeBatch">删除
-          </el-button>
+        </template>
+        <!-- 略缩图 -->
+        <template slot="smallPicUrl" slot-scope="{row}">
+          <el-image
+            style="width: 100px; height: 100px"
+            fit="contain"
+            :src="row.smallPicUrl"
+            :preview-src-list="[row.smallPicUrl.replace('?imageMogr2/thumbnail/!10p', '')]">
+          </el-image>
+        </template>
+        <!-- 标签 -->
+        <template slot="tags" slot-scope="{row}">
+          <el-tag v-for="(item, index) in row.tags" :key="index"
+            type="primary"
+            size="mini">
+            {{ item }}
+          </el-tag>
+        </template>
+        <!-- 评分 -->
+        <template slot="score" slot-scope="{row}">
+          <el-rate
+            v-model="row.score"
+            disabled
+            show-score
+            text-color="#ff9900"
+            score-template="{value}分" />
         </template>
         <!-- 操作列 -->
         <template slot="action" slot-scope="{row}">
           <el-link
-            v-if="permission.includes('sys:init-model:convert')"
-            :underline="false"
-            icon="el-icon-_surveying"
-            type="primary"
-            @click="openConvert(row)">转换
-          </el-link>
-          <el-link
-            v-if="permission.includes('sys:init-model:edit')"
+            v-if="permission.includes('sys:wallpaper:edit')"
             :underline="false"
             icon="el-icon-edit"
             type="primary"
@@ -83,10 +99,10 @@
           </el-link>
           <el-popconfirm
             class="ele-action"
-            title="确定要删除此信息吗？"
+            title="确定要删除此壁纸吗？"
             @confirm="remove(row)">
             <el-link
-              v-if="permission.includes('sys:init-model:delete')"
+              v-if="permission.includes('sys:wallpaper:delete')"
               slot="reference"
               :underline="false"
               icon="el-icon-delete"
@@ -97,33 +113,28 @@
       </ele-pro-table>
     </el-card>
     <!-- 编辑弹窗 -->
-    <init-model-edit
+    <wallpaper-edit
       :data="current"
+      :classifies="classifies"
       :visible.sync="showEdit"
-      @done="reload"/>
-    <!-- 转换弹窗 -->
-    <convert-init-model
-      :data="current"
-      :visible.sync="showConvert"
       @done="reload"/>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
-import InitModelEdit from './init-model-edit.vue';
-import ConvertInitModel from './init-model.vue';
+import WallpaperEdit from './wallpaper-edit.vue';
 
 export default {
-  name: 'ConvertPath',
-  components: {InitModelEdit, ConvertInitModel},
+  name: 'Member',
+  components: {WallpaperEdit},
   computed: {
     ...mapGetters(["permission"]),
   },
   data() {
     return {
       // 表格数据接口
-      url: '/init-model/index',
+      url: '/wallpaper/index',
       // 表格列配置
       columns: [
         {
@@ -142,29 +153,46 @@ export default {
           fixed: "left"
         },
         {
-          prop: 'code',
-          label: '框架编码',
+          prop: 'smallPicUrl',
+          label: '壁纸图片',
           align: 'center',
           showOverflowTooltip: true,
-          width: 100,
+          minWidth: 110,
+          slot: 'smallPicUrl'
         },
         {
-          prop: 'name',
-          label: '框架名称',
+          prop: 'classify.name',
+          label: '壁纸分类',
           align: 'center',
           showOverflowTooltip: true,
-          width: 150,
+          minWidth: 110
         },
         {
-          prop: 'tip',
-          label: '参考格式',
+          prop: 'nickname',
+          label: '发布者',
           align: 'center',
           showOverflowTooltip: true,
-          minWidth: 200
+          minWidth: 100,
+        },
+        {
+          prop: 'tags',
+          label: '标签',
+          align: 'center',
+          showOverflowTooltip: true,
+          minWidth: 100,
+          slot: 'tags'
+        },
+        {
+          prop: 'score',
+          label: '评分',
+          align: 'center',
+          showOverflowTooltip: true,
+          minWidth: 120,
+          slot: 'score'
         },
         {
           prop: 'createTime',
-          label: '创建时间',
+          label: '注册时间',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 160,
@@ -185,7 +213,7 @@ export default {
         {
           columnKey: 'action',
           label: '操作',
-          width: 190,
+          width: 130,
           align: 'center',
           resizable: false,
           slot: 'action',
@@ -193,16 +221,23 @@ export default {
         }
       ],
       // 表格搜索条件
-      where: {},
+      where: {
+        include: ['classify']
+      },
+      // 壁纸分类
+      classifies: [],
       // 表格选中数据
       selection: [],
       // 当前编辑数据
       current: null,
       // 是否显示编辑弹窗
       showEdit: false,
-      // 是否显示转换弹窗
-      showConvert: false
+      // 是否显示导入弹窗
+      showImport: false
     };
+  },
+  mounted() {
+    this.getClassifies()
   },
   methods: {
     /* 刷新表格 */
@@ -219,15 +254,10 @@ export default {
       this.current = row;
       this.showEdit = true;
     },
-    /* 显示转换 */
-    openConvert(row) {
-      this.current = row;
-      this.showConvert = true;
-    },
     /* 删除 */
     remove(row) {
       const loading = this.$loading({lock: true});
-      this.$http.post('/init-model/delete', {id: row.id}).then(res => {
+      this.$http.delete(`/wallpaper/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);
@@ -240,29 +270,37 @@ export default {
         this.$message.error(e.message);
       });
     },
-    /* 批量删除 */
-    removeBatch() {
-      if (!this.selection.length) {
-        this.$message.error('请至少选择一条数据')
-        return;
-      }
-      this.$confirm('确定要删除选中的信息吗?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        const loading = this.$loading({lock: true});
-        this.$http.post('/init-model/delete', {id: this.selection.map(d => d.id)}).then(res => {
-          loading.close();
-          if (res.data.code === 0) {
-            this.$message({type: 'success', message: res.data.msg});
-            this.reload();
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        }).catch(e => {
-          loading.close();
-          this.$message.error(e.message);
-        });
-      }).catch(() => {
+
+    /* 获取壁纸分类 */
+    getClassifies() {
+      this.$http.get('/wallpaper-classify/list').then(res => {
+        if (res.data.code === 0) {
+          this.classifies = res.data.data
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      }).catch(e => {
+        this.$message.error(e.message);
+      });
+    },
+
+    /* 更改状态 */
+    editStatus(row) {
+      const loading = this.$loading({lock: true});
+      let params = Object.assign({
+        "status": row.status
+      })
+      this.$http.post(`/wallpaper/${row.id}`, params).then(res => {
+        loading.close();
+        if (res.data.code === 0) {
+          this.$message({type: 'success', message: res.data.msg});
+        } else {
+          row.status = !row.status ? 1 : 2;
+          this.$message.error(res.data.msg);
+        }
+      }).catch(e => {
+        loading.close();
+        this.$message.error(e.message);
       });
     }
   }

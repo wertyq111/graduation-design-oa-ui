@@ -51,8 +51,8 @@
         <el-table-column align="center" label="经度" min-width="100" prop="lng"/>
         <el-table-column align="center" label="纬度" min-width="100" prop="lat"/>
         <el-table-column align="center" label="排序" prop="sort" width="60px"/>
-        <el-table-column align="center" label="创建时间" min-width="160" prop="create_time" show-overflow-tooltip>
-          <template slot-scope="{row}">{{ row.create_time | toDateString }}</template>
+        <el-table-column align="center" label="创建时间" min-width="160" prop="createTime" show-overflow-tooltip>
+          <template slot-scope="{row}">{{ row.createTime | toDateString }}</template>
         </el-table-column>
         <el-table-column :resizable="false" align="center" fixed="right" label="操作" width="190px">
           <template slot-scope="{row}">

@@ -155,7 +155,7 @@ export default {
           minWidth: 200
         },
         {
-          prop: 'create_time',
+          prop: 'createTime',
           label: '创建时间',
           align: 'center',
           showOverflowTooltip: true,
@@ -165,7 +165,7 @@ export default {
           }
         },
         {
-          prop: 'update_time',
+          prop: 'updateTime',
           label: '更新时间',
           align: 'center',
           showOverflowTooltip: true,

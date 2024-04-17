@@ -276,9 +276,10 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$http.post('/menu/edit',
+          let url = this.isUpdate ? `/menu/${this.form.id}` : '/menu/add'
+          this.$http.post(url,
             Object.assign({}, this.form, {
-              parent_id: this.form.pid || 0,
+              pid: this.form.pid || 0,
               target: this.form.target === 2 ? "_blank" : "_self"
             })
           ).then(res => {

@@ -185,7 +185,7 @@ export default {
           slot: 'type'
         },
         {
-          prop: 'create_time',
+          prop: 'createTime',
           label: '操作时间',
           sortable: 'custom',
           showOverflowTooltip: true,

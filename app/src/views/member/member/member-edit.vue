@@ -13,6 +13,9 @@
       :model="form"
       :rules="rules"
       label-width="82px">
+      <el-form-item label="会员账号:">
+        <span class="ele-text-primary">{{ form.user ? form.user.username : null }}</span>
+      </el-form-item>
       <el-form-item label="会员头像：">
         <uploadImage v-model="form.avatar" :limit="1"></uploadImage>
       </el-form-item>
@@ -65,14 +68,6 @@
               <el-radio :label="2">禁用</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="会员账号:" prop="username">
-            <el-input
-              v-model="form.username"
-              :disabled="isUpdate"
-              :maxlength="20"
-              clearable
-              placeholder="请输入会员账号"/>
-          </el-form-item>
         </el-col>
         <el-col :sm="12">
           <el-form-item label="会员昵称:" prop="nickname">
@@ -110,9 +105,9 @@
               clearable
               placeholder="请输入详细地址"/>
           </el-form-item>
-          <el-form-item label="会员等级:" prop="member_level">
+          <el-form-item label="会员等级:" prop="memberLevel">
             <el-select
-              v-model="form.member_level"
+              v-model="form.memberLevel"
               class="ele-block"
               clearable
               filterable
@@ -120,15 +115,6 @@
               size="small">
               <el-option v-for="item in memberLevelList" :key="item.id" :label="item.name" :value="item.id"/>
             </el-select>
-          </el-form-item>
-          <el-form-item
-            label="登录密码:"
-            prop="password">
-            <el-input
-              v-model="form.password"
-              :maxlength="20"
-              placeholder="请输入登录密码"
-              show-password/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -191,29 +177,6 @@ export default {
       form: Object.assign({status: 1, gender: 1}, this.data),
       // 表单验证规则
       rules: {
-        // username: [
-        //   {
-        //     required: true,
-        //     type: 'string',
-        //     trigger: 'blur',
-        //     validator: (rule, value, callback) => {
-        //       if (!value) {
-        //         return callback(new Error('请输入会员账号'));
-        //       }
-        //       this.$http.get('/member/checkUser?username=' + value).then(res => {
-        //         if (res.data.code !== 0 || !res.data.data.length) {
-        //           return callback();
-        //         }
-        //         if (this.isUpdate && res.data.data[0].username === this.data.username) {
-        //           return callback();
-        //         }
-        //         callback(new Error('账号已经存在'));
-        //       }).catch(() => {
-        //         callback();
-        //       });
-        //     }
-        //   }
-        // ],
         realname: [
           {required: true, message: '请输入会员姓名', trigger: 'blur'}
         ],
@@ -235,12 +198,9 @@ export default {
         status: [
           {required: true, message: '请选择状态', trigger: 'blur'}
         ],
-        member_level: [
+        memberLevel: [
           {required: true, message: '请选择会员等级', trigger: 'blur'}
-        ],
-        // password: [
-        //   {required: true, pattern: /^[\S]{5,18}$/, message: '密码必须为5-18位非空白字符', trigger: 'blur'}
-        // ]
+        ]
       },
       // 提交状态
       loading: false,
@@ -282,7 +242,12 @@ export default {
           this.form = Object.assign({}, this.form, {
             city: this.city
           });
-          this.$http.post('/member/edit', this.form).then(res => {
+          // 区别添加还是编辑
+          let url = "/members/add";
+          if (this.isUpdate === true) {
+            url = `/members/${this.form.id}`
+          }
+          this.$http.post(url, this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {
               this.$message({type: 'success', message: res.data.msg});
@@ -311,7 +276,7 @@ export default {
      * 获取会员等级列表
      */
     getMemberLevelList() {
-      this.$http.get('/memberlevel/getMemberLevelList').then(res => {
+      this.$http.get('/member-level/list').then(res => {
         if (res.data.code === 0) {
           this.memberLevelList = res.data.data;
         } else {

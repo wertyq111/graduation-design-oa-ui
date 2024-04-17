@@ -150,7 +150,7 @@ export default {
           if (res.data.code === 0) {
             this.$message.success('登录成功');
             this.$store.dispatch('user/setToken', {
-              token: 'Bearer ' + res.data.data.accessToken,
+              token: 'Bearer ' + res.data.data.access_token,
               remember: this.form.remember
             }).then(() => {
               this.goHome();

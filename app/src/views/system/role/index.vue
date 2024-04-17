@@ -178,28 +178,6 @@ export default {
           minWidth: 200
         },
         {
-          prop: 'create_time',
-          label: '创建时间',
-          sortable: 'custom',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 160,
-          formatter: (row, column, cellValue) => {
-            return this.$util.toDateString(cellValue);
-          }
-        },
-        {
-          prop: 'update_time',
-          label: '更新时间',
-          sortable: 'custom',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 160,
-          formatter: (row, column, cellValue) => {
-            return this.$util.toDateString(cellValue);
-          }
-        },
-        {
           columnKey: 'action',
           label: '操作',
           width: 230,
@@ -244,7 +222,7 @@ export default {
     /* 删除 */
     remove(row) {
       const loading = this.$loading({lock: true});
-      this.$http.post('/role/delete', {id: row.id}).then(res => {
+      this.$http.delete(`/role/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);
@@ -267,7 +245,7 @@ export default {
         type: 'warning'
       }).then(() => {
         const loading = this.$loading({lock: true});
-        this.$http.post('/role/delete', {id: this.selection.map(d => d.id)}).then(res => {
+        this.$http.post('/role/batchDelete', {id: this.selection.map(d => d.id)}).then(res => {
           loading.close();
           if (res.data.code === 0) {
             this.$message.success(res.data.msg);

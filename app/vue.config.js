@@ -10,7 +10,9 @@ module.exports = {
       'Access-Control-Allow-Origin': '*',
     },
     hotOnly: false,
-    disableHostCheck: true
+    disableHostCheck: true,
+    port: 8080,
+    public: '0.0.0.0:8082'
   },
   productionSourceMap: false,
   transpileDependencies: ['element-ui', 'ele-admin', 'vue-i18n'],

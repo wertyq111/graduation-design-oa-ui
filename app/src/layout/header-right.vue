@@ -30,8 +30,8 @@
     <div id="user-info" class="ele-admin-header-tool-item">
       <el-dropdown @command="onUserDropClick">
         <div class="ele-admin-header-avatar">
-          <el-avatar :src="loginUser.avatar"/>
-          <span class="hidden-xs-only">{{ loginUser.nickname }}</span>
+          <el-avatar :src="loginUser.member ? loginUser.member.avatar : null"/>
+          <span class="hidden-xs-only">{{ loginUser.member ? loginUser.member.nickname : loginUser.username }}</span>
           <i class="el-icon-arrow-down hidden-xs-only"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -85,6 +85,8 @@ export default {
       fullscreen: false
     };
   },
+  mounted() {
+  },
   methods: {
     /* 个人信息下拉菜单点击 */
     onUserDropClick(command) {
@@ -96,7 +98,7 @@ export default {
           {type: 'warning'}
         ).then(() => {
           // 调用接口退出登录
-          this.$http.get('/logout').then(res => {
+          this.$http.delete('/user/logout').then(res => {
             if (res.data.code === 0) {
               // 清除缓存的token
               this.$store.dispatch('user/removeToken').then(() => {
@@ -105,11 +107,12 @@ export default {
             } else {
               this.$message.error(res.data.msg);
             }
-          }).catch((e) => {
-            this.$message.error(e.message);
+          }).catch(e => {
+            let res = e.response
+            this.$message.error(res.data.data.message);
           });
-
-        }).catch(() => {
+        }).catch(e => {
+          console.log(e)
         });
       } else if (command === 'profile') {
         if (this.$route.fullPath !== '/user/profile') {

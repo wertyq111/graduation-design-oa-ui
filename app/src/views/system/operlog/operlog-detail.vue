@@ -25,7 +25,7 @@
           </el-form-item>
           <el-form-item label="操作时间:">
             <div class="ele-text-secondary">
-              {{ data.create_time | toDateString }}
+              {{ data.createTime | toDateString }}
             </div>
           </el-form-item>
         </el-col>

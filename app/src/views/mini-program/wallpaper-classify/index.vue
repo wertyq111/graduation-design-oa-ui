@@ -10,19 +10,11 @@
         @submit.native.prevent>
         <el-row :gutter="15">
           <el-col :lg="6" :md="12">
-            <el-form-item label="框架编码:">
-              <el-input
-                v-model="where.code"
-                clearable
-                placeholder="请输入框架编码"/>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="6" :md="12">
-            <el-form-item label="框架名称:">
+            <el-form-item label="分类名称:">
               <el-input
                 v-model="where.name"
                 clearable
-                placeholder="请输入框架名称"/>
+                placeholder="请输入分类名称"/>
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="12">
@@ -49,7 +41,7 @@
         <!-- 表头工具栏 -->
         <template slot="toolbar">
           <el-button
-            v-if="permission.includes('sys:init-model:add')"
+            v-if="permission.includes('sys:wallpaper-classify:add')"
             class="ele-btn-icon"
             icon="el-icon-plus"
             size="small"
@@ -57,7 +49,7 @@
             @click="openEdit(null)">添加
           </el-button>
           <el-button
-            v-if="permission.includes('sys:init-model:dall')"
+            v-if="permission.includes('sys:wallpaper-classify:dall')"
             class="ele-btn-icon"
             icon="el-icon-delete"
             size="small"
@@ -68,14 +60,7 @@
         <!-- 操作列 -->
         <template slot="action" slot-scope="{row}">
           <el-link
-            v-if="permission.includes('sys:init-model:convert')"
-            :underline="false"
-            icon="el-icon-_surveying"
-            type="primary"
-            @click="openConvert(row)">转换
-          </el-link>
-          <el-link
-            v-if="permission.includes('sys:init-model:edit')"
+            v-if="permission.includes('sys:wallpaper-classify:edit')"
             :underline="false"
             icon="el-icon-edit"
             type="primary"
@@ -83,10 +68,10 @@
           </el-link>
           <el-popconfirm
             class="ele-action"
-            title="确定要删除此信息吗？"
+            title="确定要删除此分类吗？"
             @confirm="remove(row)">
             <el-link
-              v-if="permission.includes('sys:init-model:delete')"
+              v-if="permission.includes('sys:wallpaper-classify:delete')"
               slot="reference"
               :underline="false"
               icon="el-icon-delete"
@@ -97,33 +82,27 @@
       </ele-pro-table>
     </el-card>
     <!-- 编辑弹窗 -->
-    <init-model-edit
+    <wallpaper-classify-edit
       :data="current"
       :visible.sync="showEdit"
-      @done="reload"/>
-    <!-- 转换弹窗 -->
-    <convert-init-model
-      :data="current"
-      :visible.sync="showConvert"
       @done="reload"/>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
-import InitModelEdit from './init-model-edit.vue';
-import ConvertInitModel from './init-model.vue';
+import wallpaperClassifyEdit from './wallpaper-classify-edit.vue';
 
 export default {
-  name: 'ConvertPath',
-  components: {InitModelEdit, ConvertInitModel},
+  name: 'wallpaper-classify',
+  components: {wallpaperClassifyEdit},
   computed: {
     ...mapGetters(["permission"]),
   },
   data() {
     return {
       // 表格数据接口
-      url: '/init-model/index',
+      url: '/wallpaper-classify/index',
       // 表格列配置
       columns: [
         {
@@ -142,32 +121,26 @@ export default {
           fixed: "left"
         },
         {
-          prop: 'code',
-          label: '框架编码',
-          align: 'center',
-          showOverflowTooltip: true,
-          width: 100,
-        },
-        {
           prop: 'name',
-          label: '框架名称',
-          align: 'center',
+          label: '分类名称',
           showOverflowTooltip: true,
-          width: 150,
+          minWidth: 200,
+          align: 'center',
         },
         {
-          prop: 'tip',
-          label: '参考格式',
+          prop: 'sort',
+          label: '排序号',
           align: 'center',
           showOverflowTooltip: true,
-          minWidth: 200
+          width: 100
         },
         {
           prop: 'createTime',
           label: '创建时间',
-          align: 'center',
+          sortable: 'custom',
           showOverflowTooltip: true,
           minWidth: 160,
+          align: 'center',
           formatter: (row, column, cellValue) => {
             return this.$util.toDateString(cellValue);
           }
@@ -175,9 +148,10 @@ export default {
         {
           prop: 'updateTime',
           label: '更新时间',
-          align: 'center',
+          sortable: 'custom',
           showOverflowTooltip: true,
           minWidth: 160,
+          align: 'center',
           formatter: (row, column, cellValue) => {
             return this.$util.toDateString(cellValue);
           }
@@ -185,7 +159,7 @@ export default {
         {
           columnKey: 'action',
           label: '操作',
-          width: 190,
+          width: 150,
           align: 'center',
           resizable: false,
           slot: 'action',
@@ -200,8 +174,6 @@ export default {
       current: null,
       // 是否显示编辑弹窗
       showEdit: false,
-      // 是否显示转换弹窗
-      showConvert: false
     };
   },
   methods: {
@@ -219,15 +191,10 @@ export default {
       this.current = row;
       this.showEdit = true;
     },
-    /* 显示转换 */
-    openConvert(row) {
-      this.current = row;
-      this.showConvert = true;
-    },
     /* 删除 */
     remove(row) {
       const loading = this.$loading({lock: true});
-      this.$http.post('/init-model/delete', {id: row.id}).then(res => {
+      this.$http.delete(`/wallpaper-classify/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);
@@ -238,31 +205,6 @@ export default {
       }).catch(e => {
         loading.close();
         this.$message.error(e.message);
-      });
-    },
-    /* 批量删除 */
-    removeBatch() {
-      if (!this.selection.length) {
-        this.$message.error('请至少选择一条数据')
-        return;
-      }
-      this.$confirm('确定要删除选中的信息吗?', '提示', {
-        type: 'warning'
-      }).then(() => {
-        const loading = this.$loading({lock: true});
-        this.$http.post('/init-model/delete', {id: this.selection.map(d => d.id)}).then(res => {
-          loading.close();
-          if (res.data.code === 0) {
-            this.$message({type: 'success', message: res.data.msg});
-            this.reload();
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        }).catch(e => {
-          loading.close();
-          this.$message.error(e.message);
-        });
-      }).catch(() => {
       });
     }
   }
