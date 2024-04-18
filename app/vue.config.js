@@ -1,19 +1,8 @@
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const fs = require('node:fs')
+const path = require('node:path')
 
 module.exports = {
-  devServer: {
-    historyApiFallback: true,
-    allowedHosts: [
-      '.chouy.xyz'
-    ],
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-    hotOnly: false,
-    disableHostCheck: true,
-    port: 8080,
-    public: '0.0.0.0:8082'
-  },
   productionSourceMap: false,
   transpileDependencies: ['element-ui', 'ele-admin', 'vue-i18n'],
   chainWebpack: (config) => {
@@ -28,6 +17,21 @@ module.exports = {
         minRatio: 0.8
       }));
     }
+  },
+  devServer: {
+    historyApiFallback: true,
+    allowedHosts: [
+      '.chouy.xyz'
+    ],
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+    public: 'www.chouy.xyz',
+    hotOnly: false,
+    disableHostCheck: true,
+    https: true,
+    cert: fs.readFileSync(path.join(__dirname, 'ssl/chouy.xyz.crt')),
+    key: fs.readFileSync(path.join(__dirname, 'ssl/chouy.xyz.key'))
   },
   css: {
     loaderOptions: {
