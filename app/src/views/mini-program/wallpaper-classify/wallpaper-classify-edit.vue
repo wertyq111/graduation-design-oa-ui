@@ -88,7 +88,7 @@ export default {
   watch: {
     data() {
       if (this.data) {
-        if(this.data.select) {
+        if("select" in this.data) {
           this.data.select = !!this.data.select // 转换成 boolean 值
         }
 

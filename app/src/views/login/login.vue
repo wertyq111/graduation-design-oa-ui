@@ -156,7 +156,7 @@ export default {
               this.goHome();
             });
           } else {
-            this.$message.error(res.data.msg);
+            this.$message.error(res.data.data ? res.data.data.message : res.data.msg);
             // 重新刷新验证码
             this.changeCode()
           }
