@@ -96,7 +96,7 @@ export default {
         if (valid) {
           this.loading = true;
           this.convertToArray();
-          this.$http.post('/server-path/convert', this.form).then(res => {
+          this.$http.post(`/server-path/convert/${this.form.id}`, this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {
               this.result = this.convertToString(res.data.data);

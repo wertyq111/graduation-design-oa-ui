@@ -89,7 +89,7 @@ export default {
     data() {
       if (this.data) {
         if("select" in this.data) {
-          this.data.select = !!this.data.select // 转换成 boolean 值
+          this.$set(this.data, "select", !!this.data.select) // 转换成 boolean 值
         }
 
         this.form = Object.assign({}, this.data);

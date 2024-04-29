@@ -122,7 +122,12 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$http.post('/init-model/edit', this.form).then(res => {
+          // 区别添加还是编辑
+          let url = "/init-model/add";
+          if (this.isUpdate === true) {
+            url = `/init-model/${this.form.id}`
+          }
+          this.$http.post(url, this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {
               this.$message({type: 'success', message: res.data.msg});

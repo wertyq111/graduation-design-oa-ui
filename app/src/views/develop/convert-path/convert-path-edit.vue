@@ -44,28 +44,28 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-for="(item, index) in form.sources" :key="index" :gutter="15">
-        <el-col :sm="21">
-          <el-form-item :label=sourceNum(index) prop="sources">
-            <el-input
-              v-model="form.sources[index]"
-              :maxlength="200"
-              clearable
-              placeholder="请输入来源地址"/>
-          </el-form-item>
-        </el-col>
-        <!-- 若表单中没有值则不可以新增sources -->
-        <span v-if="index === 0"
-              :class="form.sources[form.sources.length - 1] === '' ? 'change-icon-add': 'change-icon'">
+        <el-row v-for="(item, index) in form.sources" :key="index" :gutter="15">
+          <el-col :sm="21">
+            <el-form-item :label=sourceNum(index) prop="sources">
+              <el-input
+                v-model="form.sources[index]"
+                :maxlength="200"
+                clearable
+                placeholder="请输入来源地址"/>
+            </el-form-item>
+          </el-col>
+          <!-- 若表单中没有值则不可以新增sources -->
+          <span v-if="index === 0"
+                :class="form.sources[form.sources.length - 1] === '' ? 'change-icon-add': 'change-icon'">
           <i :style="{pointerEvents:form.sources[form.sources.length - 1] === '' ? 'none' : 'auto'}"
              class="el-icon-plus"
              @click="addSource()"
           ></i>
         </span>
-        <span v-else class="change-icon" @click="deleteSource(index)">
+          <span v-else class="change-icon" @click="deleteSource(index)">
             <i class="el-icon-minus"></i>
           </span>
-      </el-row>
+        </el-row>
     </el-form>
     <div slot="footer">
       <el-button
@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       // 表单数据
-      form: Object.assign({status: 1}, this.data),
+      form: this.initFormData(this.data),
       // 表单验证规则
       rules: {
         code: [
@@ -120,24 +120,9 @@ export default {
   },
   watch: {
     data() {
-      if (this.data) {
-        this.form = Object.assign({}, this.data);
-        this.isUpdate = true;
-      } else {
-        this.form = {};
-        this.isUpdate = false;
-      }
+      this.isUpdate = !!(this.data && this.data.id);
+      this.form = this.initFormData(this.data);
     },
-    form: {
-      immediate: true,
-      handler() {
-        if (this.data) {
-          this.form.sources = JSON.parse(this.data.sources)
-        } else {
-          this.form.sources = ['']
-        }
-      }
-    }
   },
   methods: {
     // 新增来源地址
@@ -154,7 +139,12 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$http.post('/server-path/edit', this.form).then(res => {
+          // 区别添加还是编辑
+          let url = "/server-path/add";
+          if (this.isUpdate === true) {
+            url = `/server-path/${this.form.id}`
+          }
+          this.$http.post(url, this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {
               this.$message({type: 'success', message: res.data.msg});
@@ -174,6 +164,20 @@ export default {
           return false;
         }
       });
+    },
+    /* 初始化form数据 */
+    initFormData(data) {
+      // 初始化默认值
+      let form = {status: 1};
+      if (data) {
+        data.sources = JSON.parse(data.sources)
+        Object.assign(form, data);
+      } else {
+        Object.assign(form, data, {
+          sources: [""],
+        });
+      }
+      return form;
     },
     /* 更新visible */
     updateVisible(value) {

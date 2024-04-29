@@ -102,7 +102,7 @@ export default {
         if (valid) {
           this.loading = true;
           this.convertToArray();
-          this.$http.post('/init-model/convert', this.form).then(res => {
+          this.$http.post(`/init-model/convert/${this.form.id}`, this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {
               this.result = res.data.data;
