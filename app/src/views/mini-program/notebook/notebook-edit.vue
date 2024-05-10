@@ -1,4 +1,4 @@
-<!-- 会员编辑弹窗 -->
+<!-- 编辑弹窗 -->
 <template>
   <el-dialog
     :destroy-on-close="true"
@@ -33,8 +33,22 @@
             clearable
             filterable
             placeholder="-请选择分类-"
+            @change="handleLabels"
             size="small">
             <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="文章标签:" prop="labelId">
+        <el-col :span="8">
+          <el-select
+            v-model="form.labelId"
+            class="ele-block"
+            clearable
+            filterable
+            placeholder="-请选择标签-"
+            size="small">
+            <el-option v-for="item in labels" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-col>
       </el-form-item>
@@ -115,19 +129,18 @@ export default {
           {required: true, message: '请输入标题', trigger: 'blur'}
         ],
         categoryId: [
-          {required: true, message: '请选择壁纸分类', trigger: 'change'}
+          {required: true, message: '请选择文章分类', trigger: 'change'}
+        ],
+        labelId: [
+          {required: true, message: '请选择文章标签', trigger: 'change'}
         ]
       },
       // 提交状态
       loading: false,
       // 是否是修改
       isUpdate: false,
-      // 评分颜色
-      scoreColors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-      // 标签编辑状态
-      tagVisible: false,
-      // 标签值
-      tagValue: ''
+      // 标签
+      labels: []
     };
   },
   watch: {
@@ -135,6 +148,7 @@ export default {
       if (this.data) {
         this.form = Object.assign({}, this.data);
         this.isUpdate = true;
+        this.handleLabels(this.data.categoryId);
       } else {
         this.form = {};
         this.isUpdate = false;
@@ -210,7 +224,7 @@ export default {
     /* 更新壁纸图片 */
     handleCover(url) {
       this.form.url = url
-      this.form.cover = url + "?imageMogr2/thumbnail/!10p"
+      this.form.cover = url + "?imageMogr2/thumbnail/!30p"
     },
 
     /* 上传图片 */
@@ -260,6 +274,25 @@ export default {
         });
       }
       return isJPG && isLt10M;
+    },
+
+    /* 处理分类下的标签 */
+    handleLabels(categoryId) {
+      let index = this.categories.findIndex((c) => {
+        return categoryId === c.id;
+      });
+      this.labels = this.categories[index].labels
+
+      // 清空标签列表,如果有选中的优先选中标签
+      let checkLabelIndex = this.labels.findIndex((l) => {
+        return this.data.labelId === l.id;
+      })
+
+      if(checkLabelIndex === -1) {
+        this.form.labelId = null
+      } else {
+        this.form.labelId = this.data.labelId
+      }
     },
 
     /* 更新visible */

@@ -3,7 +3,7 @@
   <el-dialog
     :destroy-on-close="true"
     :lock-scroll="false"
-    :title="isUpdate?'修改文章分类':'添加文章分类'"
+    :title="isUpdate?'修改文章标签':'添加文章标签'"
     :visible="visible"
     custom-class="ele-dialog-form"
     width="750px"
@@ -13,7 +13,20 @@
       :model="form"
       :rules="rules"
       label-width="82px">
-      <el-form-item label="分类名称:" prop="name">
+      <el-form-item label="文章分类:" prop="categoryId">
+        <el-col :span="8">
+          <el-select
+            v-model="form.categoryId"
+            class="ele-block"
+            clearable
+            filterable
+            placeholder="-请选择分类-"
+            size="small">
+            <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="标签名称:" prop="name">
         <el-col :span="8">
           <el-input
             v-model="form.name"
@@ -28,14 +41,6 @@
           type="textarea"
           clearable
           placeholder="请输入描述"/>
-      </el-form-item>
-      <el-form-item label="优先级:" prop="priority">
-        <el-col :span="5">
-          <el-input
-            v-model.number="form.priority"
-            clearable
-            placeholder="请输入优先级"/>
-        </el-col>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -52,13 +57,16 @@
 </template>
 
 <script>
+
 export default {
-  name: 'CategoryEdit',
+  name: 'LabelEdit',
   props: {
     // 弹窗是否打开
     visible: Boolean,
     // 修改回显的数据
     data: Object,
+    // 文章分类
+    categories: Array,
   },
   data() {
     return {
@@ -67,10 +75,10 @@ export default {
       // 表单验证规则
       rules: {
         name: [
-          {required: true, message: '请输入文章分类名', trigger: 'blur'}
+          {required: true, message: '请输入标签名称', trigger: 'blur'}
         ],
-        priority: [
-          {type: 'number', required: true, message: '优先级必须为数字'}
+        categoryId: [
+          {required: true, message: '请选择壁纸分类', trigger: 'change'}
         ]
       },
       // 提交状态
@@ -99,9 +107,9 @@ export default {
           // 城市数据处理
           this.form = Object.assign({}, this.form);
           // 区别添加还是编辑
-          let url = "/categories/add";
+          let url = "/labels/add";
           if (this.isUpdate === true) {
-            url = `/categories/${this.form.id}`
+            url = `/labels/${this.form.id}`
           }
           this.$http.post(url, this.form).then(res => {
             this.loading = false;
@@ -113,7 +121,7 @@ export default {
               this.updateVisible(false);
               this.$emit('done');
             } else {
-              this.$message.error(res.data.msg);
+              this.$message.error(res.data.data.message ? res.data.data.message : res.data.msg);
             }
           }).catch(e => {
             this.loading = false;

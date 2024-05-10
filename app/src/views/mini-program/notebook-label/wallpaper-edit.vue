@@ -164,6 +164,8 @@ export default {
           if (this.isUpdate === true) {
             url = `/wallpaper/${this.form.id}`
           }
+          console.log(url)
+          console.log(this.form)
           this.$http.post(url, this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {

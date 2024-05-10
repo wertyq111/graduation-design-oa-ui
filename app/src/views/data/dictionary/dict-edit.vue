@@ -1,4 +1,4 @@
-<!-- 字典编辑弹窗 -->
+<!-- 编辑弹窗 -->
 <template>
   <el-dialog
     :destroy-on-close="true"

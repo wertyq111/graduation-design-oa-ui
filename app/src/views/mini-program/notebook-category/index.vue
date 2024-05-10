@@ -41,7 +41,7 @@
         <!-- 表头工具栏 -->
         <template slot="toolbar">
           <el-button
-            v-if="permission.includes('sys:wallpaper:add')"
+            v-if="permission.includes('sys:notebook-category:add')"
             class="ele-btn-icon"
             icon="el-icon-plus"
             size="small"
@@ -49,36 +49,10 @@
             @click="openEdit(null)">添加
           </el-button>
         </template>
-        <!-- 略缩图 -->
-        <template slot="smallPicUrl" slot-scope="{row}">
-          <el-image
-            style="width: 100px; height: 100px"
-            fit="contain"
-            :src="row.smallPicUrl"
-            :preview-src-list="[row.smallPicUrl.replace('?imageMogr2/thumbnail/!10p', '')]">
-          </el-image>
-        </template>
-        <!-- 标签 -->
-        <template slot="tags" slot-scope="{row}">
-          <el-tag v-for="(item, index) in row.tags" :key="index"
-            type="primary"
-            size="mini">
-            {{ item }}
-          </el-tag>
-        </template>
-        <!-- 评分 -->
-        <template slot="score" slot-scope="{row}">
-          <el-rate
-            v-model="row.score"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}分" />
-        </template>
         <!-- 操作列 -->
         <template slot="action" slot-scope="{row}">
           <el-link
-            v-if="permission.includes('sys:wallpaper:edit')"
+            v-if="permission.includes('sys:notebook-category:edit')"
             :underline="false"
             icon="el-icon-edit"
             type="primary"
@@ -89,7 +63,7 @@
             title="确定要删除此壁纸吗？"
             @confirm="remove(row)">
             <el-link
-              v-if="permission.includes('sys:wallpaper:delete')"
+              v-if="permission.includes('sys:notebook-category:delete')"
               slot="reference"
               :underline="false"
               icon="el-icon-delete"
@@ -112,7 +86,7 @@ import {mapGetters} from "vuex";
 import CategoryEdit from './category-edit.vue';
 
 export default {
-  name: 'Member',
+  name: 'NotebookCategory',
   components: {CategoryEdit},
   computed: {
     ...mapGetters(["permission"]),
