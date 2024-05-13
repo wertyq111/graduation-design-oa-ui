@@ -122,7 +122,7 @@ export default {
   data() {
     return {
       // 表单数据
-      form: Object.assign({status: 1}, this.data),
+      form: Object.assign({comment_status: 0, recommend_status: 0, view_status: 0}, this.data),
       // 表单验证规则
       rules: {
         title: [
