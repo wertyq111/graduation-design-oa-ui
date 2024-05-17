@@ -28,7 +28,6 @@
       <el-form-item label="模板字段:" prop="path">
         <el-input
           v-model="form.column"
-          :maxlength="200"
           :rows="4"
           clearable
           :placeholder=form.tip
@@ -37,7 +36,6 @@
       <el-form-item label="生成结果:">
         <el-input
           v-model="result"
-          :maxlength="200"
           :rows="10"
           clearable
           readonly
