@@ -3,7 +3,7 @@
   <el-dialog
     :destroy-on-close="true"
     :lock-scroll="false"
-    :title="isUpdate?'修改壁纸':'添加壁纸'"
+    :title="isUpdate?'修改照片':'添加照片'"
     :visible="visible"
     custom-class="ele-dialog-form"
     width="750px"
@@ -13,76 +13,36 @@
       :model="form"
       :rules="rules"
       label-width="82px">
-      <el-form-item label="壁纸:" prop="smallPicUrl">
+      <el-form-item label="照片:" prop="url">
         <upload-qiniu-picture
           v-model="form.smallPicUrl"
           :isAdmin="false"
-          :prefix="'wallpaper'"
+          :prefix="'photos'"
           style="margin-top: 10px"
           :maxSize="2"
           :maxNumber="1"
-          @addPicture="handleWallpaper"/>
+          @addPicture="handlePhoto"/>
       </el-form-item>
-      <el-form-item label="壁纸分类:" prop="classId">
+      <el-form-item label="相册:" prop="categoryId">
         <el-col :span="8">
           <el-select
-            v-model="form.classId"
+            v-model="form.categoryId"
             class="ele-block"
             clearable
             filterable
-            placeholder="-请选择分类-"
+            placeholder="-请选择相册-"
             size="small">
-            <el-option v-for="item in classifies" :key="item.id" :label="item.name" :value="item.id"/>
+            <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-col>
       </el-form-item>
-      <el-form-item label="发布者:" prop="nickname">
-        <el-col :span="8">
-          <el-input
-            v-model="form.nickname"
-            :maxlength="20"
-            clearable
-            placeholder="请输入发布者"/>
-        </el-col>
-      </el-form-item>
       <el-form-item label="描述:">
+        <el-col :span="8">
         <el-input
-          v-model="form.description"
-          type="textarea"
+          v-model="form.remark"
           clearable
           placeholder="请输入描述"/>
-      </el-form-item>
-      <el-form-item label="评分:">
-        <div class="score">
-          <el-rate
-            v-model="form.score"
-            allow-half
-            show-score
-            score-template="{value}分"
-            :colors="scoreColors">
-          </el-rate>
-        </div>
-      </el-form-item>
-      <el-form-item label="标签:">
-        <el-tag
-          :key="tag"
-          v-for="tag in form.tags"
-          closable
-          :disable-transitions="false"
-          @close="handleClose(tag)">
-          {{ tag }}
-        </el-tag>
-        <el-input
-          class="input-new-tag"
-          v-if="tagVisible"
-          v-model="tagValue"
-          ref="saveTagInput"
-          size="small"
-          @keyup.enter.native="handleTagConfirm"
-          @blur="handleTagConfirm"
-        >
-        </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showTag">+添加标签</el-button>
+        </el-col>
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -102,42 +62,33 @@
 import UploadQiniuPicture from "@/components/uploadQiniuPicture.vue";
 
 export default {
-  name: 'WallpaperEdit',
+  name: 'PhotoEdit',
   props: {
     // 弹窗是否打开
     visible: Boolean,
     // 修改回显的数据
     data: Object,
-    // 壁纸分类
-    classifies: Array,
+    // 相册
+    categories: Array,
   },
   components: {UploadQiniuPicture},
   data() {
     return {
       // 表单数据
-      form: Object.assign({status: 1, gender: 1}, this.data),
+      form: Object.assign({}, this.data),
       // 表单验证规则
       rules: {
-        nickname: [
-          {required: true, message: '请输入发布者', trigger: 'blur'}
+        categoryId: [
+          {required: true, message: '请选择相册', trigger: 'change'}
         ],
-        classId: [
-          {required: true, message: '请选择壁纸分类', trigger: 'change'}
-        ],
-        smallPicUrl: [
-          {required: true, message: '请添加壁纸', trigger: 'blur'}
+        url: [
+          {required: true, message: '请添加照片', trigger: 'blur'}
         ]
       },
       // 提交状态
       loading: false,
       // 是否是修改
       isUpdate: false,
-      // 评分颜色
-      scoreColors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-      // 标签编辑状态
-      tagVisible: false,
-      // 标签值
-      tagValue: ''
     };
   },
   watch: {
@@ -160,9 +111,9 @@ export default {
           // 城市数据处理
           this.form = Object.assign({}, this.form);
           // 区别添加还是编辑
-          let url = "/wallpaper/add";
+          let url = "/photo/add";
           if (this.isUpdate === true) {
-            url = `/wallpaper/${this.form.id}`
+            url = `/photo/${this.form.id}`
           }
           this.$http.post(url, this.form).then(res => {
             this.loading = false;
@@ -186,34 +137,10 @@ export default {
       });
     },
 
-    /* 关闭标签 */
-    handleClose(tag) {
-      this.form.tags.splice(this.form.tags.indexOf(tag), 1);
-    },
-
-    /* 显示新标签 */
-    showTag() {
-      this.tagVisible = true;
-      this.$nextTick(() => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-
-    /* 编辑标签 */
-    handleTagConfirm() {
-      let tagValue = this.tagValue;
-      if (tagValue) {
-        this.form.tags = this.form.tags ? this.form.tags : [];
-        this.form.tags.push(tagValue);
-      }
-      this.tagVisible = false;
-      this.tagValue = '';
-    },
-
-    /* 更新壁纸图片 */
-    handleWallpaper(url) {
+    /* 更新照片图片 */
+    handlePhoto(url) {
       this.form.url = url
-      this.form.smallPicUrl = url + "?imageMogr2/thumbnail/!10p"
+      this.form.smallPicUrl = url + "?imageMogr2/thumbnail/!30p"
     },
 
     /* 更新visible */

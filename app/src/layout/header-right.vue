@@ -97,20 +97,24 @@ export default {
           this.$t('layout.logout.title'),
           {type: 'warning'}
         ).then(() => {
-          // 调用接口退出登录
-          this.$http.delete('/user/logout').then(res => {
-            if (res.data.code === 0) {
-              // 清除缓存的token
-              this.$store.dispatch('user/removeToken').then(() => {
-                location.replace('/login');  // 这样跳转避免再次登录重复注册动态路由
-              });
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          }).catch(e => {
-            let res = e.response
-            this.$message.error(res.data.data.message);
+          // 清除缓存的token
+          this.$store.dispatch('user/removeToken').then(() => {
+            location.replace('/login');  // 这样跳转避免再次登录重复注册动态路由
           });
+          // 调用接口退出登录
+          // this.$http.delete('/user/logout').then(res => {
+          //   if (res.data.code === 0) {
+          //     // 清除缓存的token
+          //     this.$store.dispatch('user/removeToken').then(() => {
+          //       location.replace('/login');  // 这样跳转避免再次登录重复注册动态路由
+          //     });
+          //   } else {
+          //     this.$message.error(res.data.msg);
+          //   }
+          // }).catch(e => {
+          //   let res = e.response
+          //   this.$message.error(res.data.data.message);
+          // });
         }).catch(e => {
           console.log(e)
         });

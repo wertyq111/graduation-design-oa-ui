@@ -10,24 +10,24 @@
         @submit.native.prevent>
         <el-row :gutter="15">
           <el-col :lg="6" :md="12">
-            <el-form-item label="分类:">
+            <el-form-item label="相册:">
               <el-select
-                v-model="where.classId"
+                v-model="where.categoryId"
                 class="ele-block"
                 clearable
                 filterable
-                placeholder="-请选择分类-"
+                placeholder="-请选择相册-"
                 size="small">
-                <el-option v-for="item in classifies" :key="item.id" :label="item.name" :value="item.id"/>
+                <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="12">
-            <el-form-item label="发布者:">
+            <el-form-item label="描述:">
               <el-input
-                v-model="where.nickname"
+                v-model="where.remark"
                 clearable
-                placeholder="请输入发布者"/>
+                placeholder="请输入描述"/>
             </el-form-item>
           </el-col>
           <el-col :lg="6" :md="12">
@@ -54,12 +54,20 @@
         <!-- 表头工具栏 -->
         <template slot="toolbar">
           <el-button
-            v-if="permission.includes('sys:wallpaper:add')"
+            v-if="permission.includes('sys:photo:add')"
             class="ele-btn-icon"
             icon="el-icon-plus"
             size="small"
             type="primary"
             @click="openEdit(null)">添加
+          </el-button>
+          <el-button
+            v-if="permission.includes('sys:photo:dall')"
+            class="ele-btn-icon"
+            icon="el-icon-delete"
+            size="small"
+            type="danger"
+            @click="removeBatch">删除
           </el-button>
         </template>
         <!-- 略缩图 -->
@@ -71,27 +79,10 @@
             :preview-src-list="[row.url]">
           </el-image>
         </template>
-        <!-- 标签 -->
-        <template slot="tags" slot-scope="{row}">
-          <el-tag v-for="(item, index) in row.tags" :key="index"
-            type="primary"
-            size="mini">
-            {{ item }}
-          </el-tag>
-        </template>
-        <!-- 评分 -->
-        <template slot="score" slot-scope="{row}">
-          <el-rate
-            v-model="row.score"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}分" />
-        </template>
         <!-- 操作列 -->
         <template slot="action" slot-scope="{row}">
           <el-link
-            v-if="permission.includes('sys:wallpaper:edit')"
+            v-if="permission.includes('sys:photo:edit')"
             :underline="false"
             icon="el-icon-edit"
             type="primary"
@@ -102,7 +93,7 @@
             title="确定要删除此壁纸吗？"
             @confirm="remove(row)">
             <el-link
-              v-if="permission.includes('sys:wallpaper:delete')"
+              v-if="permission.includes('sys:photo:delete')"
               slot="reference"
               :underline="false"
               icon="el-icon-delete"
@@ -113,9 +104,9 @@
       </ele-pro-table>
     </el-card>
     <!-- 编辑弹窗 -->
-    <wallpaper-edit
+    <photo-edit
       :data="current"
-      :classifies="classifies"
+      :categories="categories"
       :visible.sync="showEdit"
       @done="reload"/>
   </div>
@@ -123,18 +114,18 @@
 
 <script>
 import {mapGetters} from "vuex";
-import WallpaperEdit from './wallpaper-edit.vue';
+import PhotoEdit from './photo-edit.vue';
 
 export default {
-  name: 'Member',
-  components: {WallpaperEdit},
+  name: 'Photo',
+  components: {PhotoEdit},
   computed: {
     ...mapGetters(["permission"]),
   },
   data() {
     return {
       // 表格数据接口
-      url: '/wallpaper/index',
+      url: '/photo/index',
       // 表格列配置
       columns: [
         {
@@ -154,41 +145,32 @@ export default {
         },
         {
           prop: 'smallPicUrl',
-          label: '壁纸图片',
+          label: '照片',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 110,
           slot: 'smallPicUrl'
         },
         {
-          prop: 'classify.name',
-          label: '壁纸分类',
+          prop: 'category.name',
+          label: '相册',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 110
         },
         {
-          prop: 'nickname',
+          prop: 'member.nickname',
           label: '发布者',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 100,
         },
         {
-          prop: 'tags',
-          label: '标签',
+          prop: 'remark',
+          label: '描述',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 100,
-          slot: 'tags'
-        },
-        {
-          prop: 'score',
-          label: '评分',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 120,
-          slot: 'score'
         },
         {
           prop: 'createTime',
@@ -222,10 +204,10 @@ export default {
       ],
       // 表格搜索条件
       where: {
-        include: ['classify']
+        include: ['category', 'member']
       },
-      // 壁纸分类
-      classifies: [],
+      // 相册
+      categories: [],
       // 表格选中数据
       selection: [],
       // 当前编辑数据
@@ -237,7 +219,7 @@ export default {
     };
   },
   mounted() {
-    this.getClassifies()
+    this.getCategories()
   },
   methods: {
     /* 刷新表格 */
@@ -257,7 +239,7 @@ export default {
     /* 删除 */
     remove(row) {
       const loading = this.$loading({lock: true});
-      this.$http.delete(`/wallpaper/${row.id}`).then(res => {
+      this.$http.delete(`/photo/${row.id}`).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message.success(res.data.msg);
@@ -271,11 +253,11 @@ export default {
       });
     },
 
-    /* 获取壁纸分类 */
-    getClassifies() {
-      this.$http.get('/wallpaper-classify/list').then(res => {
+    /* 获取相册列表 */
+    getCategories() {
+      this.$http.get('/photo-categories/list').then(res => {
         if (res.data.code === 0) {
-          this.classifies = res.data.data
+          this.categories = res.data.data
         } else {
           this.$message.error(res.data.msg);
         }
@@ -285,17 +267,17 @@ export default {
     },
 
     /* 更改状态 */
-    editStatus(row) {
+    editShow(row) {
       const loading = this.$loading({lock: true});
       let params = Object.assign({
-        "status": row.status
+        "show": row.show
       })
-      this.$http.post(`/wallpaper/${row.id}`, params).then(res => {
+      this.$http.post(`/photo/${row.id}`, params).then(res => {
         loading.close();
         if (res.data.code === 0) {
           this.$message({type: 'success', message: res.data.msg});
         } else {
-          row.status = !row.status ? 1 : 2;
+          row.show = !row.show ? 1 : 0;
           this.$message.error(res.data.msg);
         }
       }).catch(e => {
