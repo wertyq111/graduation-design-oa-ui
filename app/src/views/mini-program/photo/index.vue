@@ -284,6 +284,32 @@ export default {
         loading.close();
         this.$message.error(e.message);
       });
+    },
+    /* 批量删除 */
+    removeBatch() {
+      if (!this.selection.length) {
+        this.$message.error('请至少选择一条数据')
+        return;
+      }
+      this.$confirm('确定要删除选中的照片吗?', '提示', {
+        type: 'warning'
+      }).then(() => {
+        const loading = this.$loading({lock: true});
+        let params = {id: this.selection.map(d => d.id)}
+        this.$http.delete('/photo/batch-delete', {params}).then(res => {
+          loading.close();
+          if (res.data.code === 0) {
+            this.$message({type: 'success', message: res.data.msg});
+            this.reload();
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        }).catch(e => {
+          loading.close();
+          this.$message.error(e.message);
+        });
+      }).catch(() => {
+      });
     }
   }
 }
