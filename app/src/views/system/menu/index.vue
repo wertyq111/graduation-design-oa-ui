@@ -232,6 +232,9 @@ export default {
     parseData(res) {
       res.data = this.$util.toTreeData(res.data, 'id', 'pid');
       this.menuList = res.data;
+      this.$nextTick(() => {
+        this.foldAll()
+      })
       return res;
     },
     /* 刷新表格 */

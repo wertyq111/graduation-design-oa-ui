@@ -70,22 +70,6 @@
         <template slot="avatar" slot-scope="{row}">
           <el-avatar :size="25" :src="row.avatar" shape="square"/>
         </template>
-        <!-- 设备类型列 -->
-        <template slot="device" slot-scope="{row}">
-          <el-tag
-            :type="['primary','success','warning', 'danger', 'info'][row.device-1]"
-            size="mini">
-            {{ ['苹果', '安卓', 'WAP站', 'PC站', '后台'][row.device - 1] }}
-          </el-tag>
-        </template>
-        <!-- 注册来源列 -->
-        <template slot="source" slot-scope="{row}">
-          <el-tag
-            :type="['primary','success','warning', 'danger', 'info'][row.source-1]"
-            size="mini">
-            {{ ['APP注册', '小程序注册', '网站注册', 'WAP站注册', '马甲会员'][row.source - 1] }}
-          </el-tag>
-        </template>
         <!-- 状态列 -->
         <template slot="status" slot-scope="{row}">
           <el-switch
@@ -193,22 +177,6 @@ export default {
           showOverflowTooltip: true,
           minWidth: 60,
           slot: 'gender'
-        },
-        {
-          prop: 'device',
-          label: '设备类型',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 100,
-          slot: 'device'
-        },
-        {
-          prop: 'source',
-          label: '注册来源',
-          align: 'center',
-          showOverflowTooltip: true,
-          minWidth: 100,
-          slot: 'source'
         },
         {
           prop: 'status',

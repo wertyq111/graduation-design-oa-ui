@@ -21,12 +21,12 @@
       </el-form-item>
       <el-row :gutter="15">
         <el-col :sm="12">
-          <el-form-item label="会员姓名:" prop="realname">
+          <el-form-item label="姓名:" prop="realname">
             <el-input
               v-model="form.realname"
               :maxlength="20"
               clearable
-              placeholder="请输入会员姓名"/>
+              placeholder="请输入姓名"/>
           </el-form-item>
           <el-form-item label="性别:" prop="gender">
             <el-select
@@ -36,20 +36,6 @@
               placeholder="请选择性别">
               <el-option :value="1" label="男"/>
               <el-option :value="2" label="女"/>
-              <el-option :value="3" label="保密"/>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="设备类型:" prop="device">
-            <el-select
-              v-model="form.device"
-              class="ele-block"
-              clearable
-              placeholder="请选择设备类型">
-              <el-option :value="1" label="苹果"/>
-              <el-option :value="2" label="安卓"/>
-              <el-option :value="3" label="WAP站"/>
-              <el-option :value="4" label="PC站"/>
-              <el-option :value="5" label="后台"/>
             </el-select>
           </el-form-item>
           <el-form-item label="所在城市:" prop="city">
@@ -70,12 +56,12 @@
           </el-form-item>
         </el-col>
         <el-col :sm="12">
-          <el-form-item label="会员昵称:" prop="nickname">
+          <el-form-item label="昵称:" prop="nickname">
             <el-input
               v-model="form.nickname"
               :maxlength="20"
               clearable
-              placeholder="请输入会员昵称"/>
+              placeholder="请输入昵称"/>
           </el-form-item>
           <el-form-item label="出生日期:" prop="birthday">
             <el-date-picker
@@ -85,19 +71,6 @@
               type="date"
               value-format="yyyy-MM-dd"/>
           </el-form-item>
-          <el-form-item label="会员来源:" prop="source">
-            <el-select
-              v-model="form.source"
-              class="ele-block"
-              clearable
-              placeholder="请选择会员来源">
-              <el-option :value="1" label="APP注册"/>
-              <el-option :value="2" label="小程序注册"/>
-              <el-option :value="3" label="网站注册"/>
-              <el-option :value="4" label="WAP站注册"/>
-              <el-option :value="5" label="马甲会员"/>
-            </el-select>
-          </el-form-item>
           <el-form-item label="详细地址:" prop="address">
             <el-input
               v-model="form.address"
@@ -105,13 +78,13 @@
               clearable
               placeholder="请输入详细地址"/>
           </el-form-item>
-          <el-form-item label="会员等级:" prop="memberLevel">
+          <el-form-item label="等级:" prop="memberLevel">
             <el-select
               v-model="form.memberLevel"
               class="ele-block"
               clearable
               filterable
-              placeholder="-请选择会员等级-"
+              placeholder="-请选择等级-"
               size="small">
               <el-option v-for="item in memberLevelList" :key="item.id" :label="item.name" :value="item.id"/>
             </el-select>
@@ -178,10 +151,10 @@ export default {
       // 表单验证规则
       rules: {
         realname: [
-          {required: true, message: '请输入会员姓名', trigger: 'blur'}
+          {required: true, message: '请输入姓名', trigger: 'blur'}
         ],
         nickname: [
-          {required: true, message: '请输入会员名', trigger: 'blur'}
+          {required: true, message: '请输入昵称', trigger: 'blur'}
         ],
         gender: [
           {required: true, message: '请选择性别', trigger: 'blur'}
@@ -189,17 +162,11 @@ export default {
         birthday: [
           {required: true, message: '请选择出生日期', trigger: 'blur'}
         ],
-        device: [
-          {required: true, message: '请选择设备类型', trigger: 'blur'}
-        ],
-        source: [
-          {required: true, message: '请选择注册来源', trigger: 'blur'}
-        ],
         status: [
           {required: true, message: '请选择状态', trigger: 'blur'}
         ],
         memberLevel: [
-          {required: true, message: '请选择会员等级', trigger: 'blur'}
+          {required: true, message: '请选择等级', trigger: 'blur'}
         ]
       },
       // 提交状态

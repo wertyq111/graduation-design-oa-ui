@@ -135,13 +135,13 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item v-if="form.type==0" label="权限节点:">
-        <el-transfer
-          v-model="form.checkedList"
-          :data="permissionList"
-          :titles="['全部节点', '已赋予节点']"
-        ></el-transfer>
-      </el-form-item>
+      <!--      <el-form-item v-if="form.type==0" label="权限节点:">-->
+      <!--        <el-transfer-->
+      <!--          v-model="form.checkedList"-->
+      <!--          :data="permissionList"-->
+      <!--          :titles="['全部节点', '已赋予节点']"-->
+      <!--        ></el-transfer>-->
+      <!--      </el-form-item>-->
       <el-form-item label="备注:">
         <el-input
           v-model="form.note"
@@ -248,10 +248,6 @@ export default {
         {
           key: 60,
           label: `分配权限`,
-        },
-        {
-          key: 65,
-          label: `重置密码`,
         }
       ],
     };
@@ -341,6 +337,9 @@ export default {
           pid: data.pid === 0 ? null : data.pid,
           target: target
         });
+
+        // 清空 checkedList 值, 取消所有的已选中的权限节点,这样修改菜单信息就不会影响当前的节点信息.以后节点都需要手动添加
+        this.$delete(form, 'checkedList')
       }
       return form;
     },

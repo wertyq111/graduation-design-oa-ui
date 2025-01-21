@@ -4,11 +4,11 @@
     <el-card body-style="padding: 20px;" shadow="never">
       <div class="ele-cell workplace-user-card">
         <div class="ele-cell-content ele-cell">
-          <el-avatar :size="68" :src="loginUser.avatar"/>
+          <el-avatar :size="68" :src="loginUser.member.avatar"/>
           <div class="ele-cell-content">
             <h4 class="ele-elip">
               {{ helloPrev }},
-              {{ loginUser.nickname }}，
+              {{ loginUser.member.nickname }}，
               祝你生活愉快!
               <guide :show="true" />
             </h4>

@@ -2,6 +2,7 @@
 /node_modules
 /dist
 /ssl
+/.idea
 
 # local env files
 .env.development

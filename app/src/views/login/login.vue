@@ -52,9 +52,7 @@
       </div>
     </el-form>
     <div class="login-copyright">
-      Copyright © 2023 www.chouy.xyz All rights reserved. &nbsp;
-      备案号 <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备20021765号-1</a>&nbsp;
-      <img src="/beian.png"  alt="备案" /><a href="https://beian.miit.gov.cn/" target="_blank">浙公网安备 33011002014800号</a>
+      Copyright © 2024 www.chouy.xyz All rights reserved. &nbsp;
     </div>
     <!-- 多语言切换 -->
     <div style="position: absolute;right: 30px;top: 20px;">
@@ -67,20 +65,12 @@
           <el-dropdown-item command="zh_CN">
             <span :class="{'ele-text-primary': language === 'zh_CN'}">简体中文</span>
           </el-dropdown-item>
-<!--          <el-dropdown-item command="zh_TW">-->
-<!--            <span :class="{'ele-text-primary': language === 'zh_TW'}">繁體中文</span>-->
-<!--          </el-dropdown-item>-->
+          <el-dropdown-item command="zh_TW">
+            <span :class="{'ele-text-primary': language === 'zh_TW'}">繁體中文</span>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <!-- 实际项目去掉这段 -->
-<!--        <div style="position: absolute;left: 30px;top: 20px;" class="hidden-xs-only">-->
-<!--          <el-radio-group v-model="direction" size="mini">-->
-<!--            <el-radio-button label="2">居左</el-radio-button>-->
-<!--            <el-radio-button label="0">居中</el-radio-button>-->
-<!--            <el-radio-button label="1">居右</el-radio-button>-->
-<!--          </el-radio-group>-->
-<!--        </div>-->
   </div>
 </template>
 
