@@ -19,19 +19,7 @@ module.exports = {
     }
   },
   devServer: {
-    historyApiFallback: true,
-    allowedHosts: [
-      '.chouy.xyz'
-    ],
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-    public: 'www.chouy.xyz',
-    hotOnly: false,
-    disableHostCheck: true,
-    https: true,
-    cert: fs.readFileSync(path.join(__dirname, 'ssl/chouy.xyz.crt')),
-    key: fs.readFileSync(path.join(__dirname, 'ssl/chouy.xyz.key'))
+    historyApiFallback: true
   },
   css: {
     loaderOptions: {

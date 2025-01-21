@@ -6,8 +6,10 @@ WORKDIR /project
 
 COPY . .
 
-RUN npm install global  @vue/cli
-RUN yarn install
+#RUN npm install global  @vue/cli
+RUN npm cache clean --force && npm config set registry https://registry.npmmirror.com && npm install global @vue/cli
+#RUN yarn install
+RUN yarn config set ignore-engines true && yarn install
 ENV HOST=0.0.0.0
 CMD ["npm", "run", "serve"]
 

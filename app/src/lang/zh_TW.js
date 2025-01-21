@@ -93,7 +93,7 @@ export default {
     }
   },
   login: {
-    title: '个人后台管理系统',
+    title: 'OA管理系统',
     username: '請輸入登入帳號',
     password: '請輸入登入密碼',
     captcha: '請輸入驗證碼',
