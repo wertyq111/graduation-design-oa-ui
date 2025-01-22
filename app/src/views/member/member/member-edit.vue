@@ -3,7 +3,7 @@
   <el-dialog
     :destroy-on-close="true"
     :lock-scroll="false"
-    :title="isUpdate?'修改会员':'添加会员'"
+    :title="isUpdate?'修改员工信息':'添加员工信息'"
     :visible="visible"
     custom-class="ele-dialog-form"
     width="750px"
@@ -13,10 +13,10 @@
       :model="form"
       :rules="rules"
       label-width="82px">
-      <el-form-item label="会员账号:">
+      <el-form-item label="账号:">
         <span class="ele-text-primary">{{ form.user ? form.user.username : null }}</span>
       </el-form-item>
-      <el-form-item label="会员头像：">
+      <el-form-item label="头像：">
         <uploadImage v-model="form.avatar" :limit="1"></uploadImage>
       </el-form-item>
       <el-row :gutter="15">
@@ -173,7 +173,7 @@ export default {
       loading: false,
       // 是否是修改
       isUpdate: false,
-      // 会员等级列表
+      // 员工信息等级列表
       memberLevelList: [],
     };
   },
@@ -240,7 +240,7 @@ export default {
       this.$emit('update:visible', value);
     },
     /**
-     * 获取会员等级列表
+     * 获取员工信息等级列表
      */
     getMemberLevelList() {
       this.$http.get('/member-level/list').then(res => {

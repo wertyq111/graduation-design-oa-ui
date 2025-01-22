@@ -89,7 +89,7 @@
           </el-link>
           <el-popconfirm
             class="ele-action"
-            title="确定要删除此会员吗？"
+            title="确定要删除此员工吗？"
             @confirm="remove(row)">
             <el-link
               v-if="permission.includes('sys:member:delete')"
@@ -143,21 +143,21 @@ export default {
         },
         {
           prop: 'user.username',
-          label: '会员账号',
+          label: '账号',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 110,
         },
         {
           prop: 'realname',
-          label: '会员姓名',
+          label: '姓名',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 100,
         },
         {
           prop: 'nickname',
-          label: '会员昵称',
+          label: '昵称',
           align: 'center',
           showOverflowTooltip: true,
           minWidth: 100

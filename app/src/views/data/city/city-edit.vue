@@ -126,7 +126,11 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$http.post('/city/edit',
+          let url = "/city/add";
+          if (this.isUpdate === true) {
+            url = `/city/${this.form.id}`
+          }
+          this.$http.post(url,
             Object.assign({}, this.form, {
               pid: this.form.pid || 0
             })

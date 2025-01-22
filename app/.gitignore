@@ -3,6 +3,7 @@
 /dist
 /ssl
 /.idea
+../.idea
 
 # local env files
 .env.development
