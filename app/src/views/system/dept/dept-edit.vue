@@ -151,7 +151,8 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$http.post('/dept/edit',
+          let url = this.isUpdate ? `/dept/${this.form.id}` : '/dept/add'
+          this.$http.post(url,
             Object.assign({}, this.form, {
               pid: this.form.pid || 0
             })

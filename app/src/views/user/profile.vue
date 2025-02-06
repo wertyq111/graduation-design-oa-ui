@@ -6,47 +6,47 @@
           <div class="user-info-card">
             <!-- 头像上传 -->
             <uploadImage v-model="form.avatar" :limit="1" style="left: 0px"></uploadImage>
-            <h2 class="user-info-name">vwms@netsun.com</h2>
+            <h2 class="user-info-name"><template>{{form.email}}</template></h2>
             <div class="user-info-desc">
-              谁的人生不是荆棘前行，你跌倒的时候，懊恼的时候，品尝眼泪的时候，都请你不要轻言放弃，因为从来没有一种坚持会被辜负。请你相信，你的坚持，终将美好。
+              <template>{{form.intro ? form.intro : '暂无简介'}}</template>
             </div>
           </div>
           <div class="user-info-list">
             <div class="user-info-item">
               <i class="el-icon-user"></i>
-              <span>资深架构师</span>
-            </div>
-            <div class="user-info-item">
-              <i class="el-icon-user"></i>
-              <span>浙江网盛生意宝股份邮箱公司</span>
+              <span><template>{{form.deptName}}</template></span>
             </div>
             <div class="user-info-item">
               <i class="el-icon-location-information"></i>
-              <span>中国 • 浙江省 • 杭州市</span>
+              <span><template>{{form.provinceName}} • {{form.cityName}} • {{form.districtName}}</template></span>
             </div>
             <div class="user-info-item">
-              <i class="el-icon-_school"></i>
-              <span>Laravel、MySQL、Vue、ElementUI、AntDesign</span>
+              <i class="el-icon-message"></i>
+              <span><template>{{form.email}}</template></span>
+            </div>
+            <div class="user-info-item">
+              <i class="el-icon-mobile"></i>
+              <span><template>{{form.phone}}</template></span>
             </div>
           </div>
           <div style="margin: 30px 0 20px 0;">
             <el-divider class="ele-divider-dashed ele-divider-base"/>
           </div>
-          <h6 class="ele-text" style="margin-bottom: 8px;">标签</h6>
-          <div class="user-info-tags">
-            <el-tag size="mini" type="info">风雨踏梦行</el-tag>
-            <el-tag size="mini" type="info">理想的翅膀</el-tag>
-            <el-tag size="mini" type="info">野心与梦想</el-tag>
-            <el-tag size="mini" type="info">风雨兼程</el-tag>
-            <el-tag size="mini" type="info">书写人生</el-tag>
-            <el-tag size="mini" type="info">傲气女王</el-tag>
-            <el-tag size="mini" type="info">逆境荒野</el-tag>
-            <el-tag size="mini" type="info">温柔的暴力</el-tag>
-            <el-tag size="mini" type="info">野味女生</el-tag>
-            <el-tag size="mini" type="info">霸气逼人</el-tag>
-            <el-tag size="mini" type="info">楼台烟雨中</el-tag>
-            <el-tag size="mini" type="info">青衫落拓</el-tag>
-          </div>
+<!--          <h6 class="ele-text" style="margin-bottom: 8px;">标签</h6>-->
+<!--          <div class="user-info-tags">-->
+<!--            <el-tag size="mini" type="info">风雨踏梦行</el-tag>-->
+<!--            <el-tag size="mini" type="info">理想的翅膀</el-tag>-->
+<!--            <el-tag size="mini" type="info">野心与梦想</el-tag>-->
+<!--            <el-tag size="mini" type="info">风雨兼程</el-tag>-->
+<!--            <el-tag size="mini" type="info">书写人生</el-tag>-->
+<!--            <el-tag size="mini" type="info">傲气女王</el-tag>-->
+<!--            <el-tag size="mini" type="info">逆境荒野</el-tag>-->
+<!--            <el-tag size="mini" type="info">温柔的暴力</el-tag>-->
+<!--            <el-tag size="mini" type="info">野味女生</el-tag>-->
+<!--            <el-tag size="mini" type="info">霸气逼人</el-tag>-->
+<!--            <el-tag size="mini" type="info">楼台烟雨中</el-tag>-->
+<!--            <el-tag size="mini" type="info">青衫落拓</el-tag>-->
+<!--          </div>-->
         </el-card>
       </el-col>
       <el-col :md="18" :sm="16">
@@ -84,9 +84,9 @@
                     <el-option :value="3" label="保密"/>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="联系方式:" prop="mobile">
+                <el-form-item label="联系方式:" prop="phone">
                   <el-input
-                    v-model="form.mobile"
+                    v-model="form.phone"
                     clearable
                     placeholder="请输入联系方式"/>
                 </el-form-item>
@@ -117,60 +117,6 @@
                   </el-button>
                 </el-form-item>
               </el-form>
-            </el-tab-pane>
-            <el-tab-pane label="账号绑定" name="account">
-              <div class="user-account-list">
-                <div class="user-account-item ele-cell">
-                  <div class="ele-cell-content">
-                    <div>密保手机</div>
-                    <div class="ele-text-secondary">已绑定手机：180****2354</div>
-                  </div>
-                  <el-link :underline="false" type="primary">去修改</el-link>
-                </div>
-                <el-divider/>
-                <div class="user-account-item ele-cell">
-                  <div class="ele-cell-content">
-                    <div>密保邮箱</div>
-                    <div class="ele-text-secondary">已绑定邮箱：vwms@netsun.com</div>
-                  </div>
-                  <el-link :underline="false" type="primary">去修改</el-link>
-                </div>
-                <el-divider/>
-                <div class="user-account-item ele-cell">
-                  <div class="ele-cell-content">
-                    <div>密保问题</div>
-                    <div class="ele-text-secondary">未设置密保问题</div>
-                  </div>
-                  <el-link :underline="false" type="primary">去设置</el-link>
-                </div>
-                <el-divider/>
-                <div class="user-account-item ele-cell">
-                  <i class="user-account-icon el-icon-_qq"></i>
-                  <div class="ele-cell-content">
-                    <div>绑定QQ</div>
-                    <div class="ele-text-secondary">当前未绑定QQ账号</div>
-                  </div>
-                  <el-link :underline="false" type="primary">去绑定</el-link>
-                </div>
-                <el-divider/>
-                <div class="user-account-item ele-cell">
-                  <i class="user-account-icon el-icon-_wechat"></i>
-                  <div class="ele-cell-content">
-                    <div>绑定微信</div>
-                    <div class="ele-text-secondary">当前未绑定绑定微信账号</div>
-                  </div>
-                  <el-link :underline="false" type="primary">去绑定</el-link>
-                </div>
-                <el-divider/>
-                <div class="user-account-item ele-cell">
-                  <i class="user-account-icon el-icon-_alipay"></i>
-                  <div class="ele-cell-content">
-                    <div>绑定支付宝</div>
-                    <div class="ele-text-secondary">当前未绑定绑定支付宝账号</div>
-                  </div>
-                  <el-link :underline="false" type="primary">去绑定</el-link>
-                </div>
-              </div>
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -220,8 +166,8 @@ export default {
   methods: {
     /* 获取当前用户信息 */
     getUserInfo() {
-      if (setting.userUrl) {
-        this.$http.get(setting.userUrl).then((res) => {
+      if (setting.memberUrl) {
+        this.$http.get(setting.memberUrl).then((res) => {
           const result = setting.parseUser ? setting.parseUser(res.data) : res.data;
           if (result.code === 0) {
             // 赋予对象值
@@ -239,7 +185,7 @@ export default {
       this.$refs['infoForm'].validate((valid) => {
         if (valid) {
           this.loading = true;
-          this.$http.post('/index/updateUserInfo', this.form).then(res => {
+          this.$http.post('/members/editUser', this.form).then(res => {
             this.loading = false;
             if (res.data.code === 0) {
               this.$message.success('保存成功');

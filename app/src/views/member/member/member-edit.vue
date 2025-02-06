@@ -38,6 +38,14 @@
               <el-option :value="2" label="女"/>
             </el-select>
           </el-form-item>
+          <el-form-item label="所属部门:" prop="dept_id">
+            <treeselect
+              v-model="form.deptId"
+              :defaultExpandLevel="3"
+              :normalizer="(d)=>{return { id: d.id, label: d.name,children:d.children||undefined }}"
+              :options="deptList"
+              placeholder="请选择所属部门"/>
+          </el-form-item>
           <el-form-item label="所在城市:" prop="city">
             <el-cascader
               v-model="city"
@@ -70,6 +78,17 @@
               placeholder="请选择出生日期"
               type="date"
               value-format="yyyy-MM-dd"/>
+          </el-form-item>
+          <el-form-item label="岗位：" prop="position_id">
+            <el-select
+              v-model="form.positionId"
+              class="ele-block"
+              clearable
+              filterable
+              placeholder="-请选择岗位-"
+              size="small">
+              <el-option v-for="item in positionList" :key="item.id" :label="item.name" :value="item.id"/>
+            </el-select>
           </el-form-item>
           <el-form-item label="详细地址:" prop="address">
             <el-input
@@ -126,6 +145,8 @@
 <script>
 import uploadImage from '@/components/uploadImage.vue'
 import regions from 'ele-admin/packages/regions';
+import Treeselect from '@riophae/vue-treeselect' // 下拉树
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
   name: 'MemberEdit',
@@ -135,7 +156,7 @@ export default {
     // 修改回显的数据
     data: Object
   },
-  components: {uploadImage},
+  components: {uploadImage, Treeselect},
   data() {
     return {
       // 省市区数据
@@ -175,6 +196,10 @@ export default {
       isUpdate: false,
       // 员工信息等级列表
       memberLevelList: [],
+      // 部门列表
+      deptList: [],
+      // 岗位列表
+      positionList: []
     };
   },
   watch: {
@@ -198,6 +223,8 @@ export default {
   mounted() {
     // 获取职级列表
     this.getMemberLevelList();
+    this.getPositionList(); // 查询岗位列表
+    this.getDeptList(); // 查询部门列表
   },
   methods: {
     /* 保存编辑 */
@@ -239,13 +266,35 @@ export default {
     updateVisible(value) {
       this.$emit('update:visible', value);
     },
-    /**
-     * 获取员工信息等级列表
-     */
+    /* 获取员工信息等级列表 */
     getMemberLevelList() {
       this.$http.get('/member-level/list').then(res => {
         if (res.data.code === 0) {
           this.memberLevelList = res.data.data;
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      }).catch(e => {
+        this.$message.error(e.message);
+      });
+    },
+    /* 获取部门列表 */
+    getDeptList() {
+      this.$http.get('/dept/getDeptList').then(res => {
+        if (res.data.code === 0) {
+          this.deptList = this.$util.toTreeData(res.data.data, 'id', 'pid');
+        } else {
+          this.$message.error(res.data.msg);
+        }
+      }).catch(e => {
+        this.$message.error(e.message);
+      });
+    },
+    /* 获取岗位列表 */
+    getPositionList() {
+      this.$http.get('/position/getPositionList').then(res => {
+        if (res.data.code === 0) {
+          this.positionList = res.data.data;
         } else {
           this.$message.error(res.data.msg);
         }

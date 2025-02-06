@@ -20,6 +20,8 @@ export default {
   menus: null,
   // 用户信息接口
   userUrl: '/users/getUserInfo',
+  // 用户信息接口
+  memberUrl: '/members/user',
   // 七牛云上传接口
   qiniuUploadUrl: 'https://up.qiniup.com',
   qiniuDownloadnUrl: 'https://cdn.chouy.xyz',
